@@ -1,0 +1,86 @@
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+        targetNamespace="http://spring.io/guides/gs-producing-web-service" elementFormDefault="qualified">
+    <xs:simpleType name="VehicleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HATCHBACK" />
+            <xs:enumeration value="SEDAN" />
+            <xs:enumeration value="PLANE" />
+            <xs:enumeration value="SUBMARINE" />
+            <xs:enumeration value="SHIP" />
+            <xs:enumeration value="CHOPPER" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="FuelType" final="restriction" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SOLID" />
+            <xs:enumeration value="LIQUID" />
+            <xs:enumeration value="GAS" />
+            <xs:enumeration value="DIESEL" />
+            <xs:enumeration value="KEROSENE" />
+            <xs:enumeration value="MANPOWER" />
+            <xs:enumeration value="NUCLEAR" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ISODate">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="((\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d))Z?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="coordinatesDTO">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="xCoord" type="xs:int"/>
+            <xs:element name="yCoord" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="vehicleDTO">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="coordinates" type="tns:coordinatesDTO"/>
+            <xs:element name="creationDate" type="tns:ISODate"/>
+            <xs:element name="enginePower" type="xs:int"/>
+            <xs:element name="numberOfWheels" type="xs:int"/>
+            <xs:element name="type" type="tns:VehicleType" minOccurs="0"/>
+            <xs:element name="fuelType" type="tns:FuelType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getVehicleRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="from" type="xs:long"/>
+                <xs:element name="to" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="addWheelsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="vehicle-id" type="xs:integer"/>
+                <xs:element name="wheels" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getVehicleResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="vehicles" type="tns:vehicleDTO" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="addWheelsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="responseCode" type="xs:integer"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="serviceStatus">
+        <xs:sequence>
+            <xs:element name="statusCode" type="xs:string"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
